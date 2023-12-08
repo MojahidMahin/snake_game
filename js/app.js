@@ -111,7 +111,6 @@ function move() {
 //   draw(); // Then draw again new position
 // }, 200);
 
-
 // Start game function
 function startGame() {
   gameStarted = true; // Keep track of a running game
@@ -119,8 +118,8 @@ function startGame() {
   logo.style.display = 'none';
 
   gameInterval = setInterval(() => {
-    checkCollision();
     move();
+    checkCollision();
     draw();
   }, gameSpeedDelay);
 }
@@ -166,6 +165,7 @@ function checkCollision() {
   if (head.x < 1 || head.x > gridSize || head.y < 1 || head.y > gridSize) {
     console.log("Collided here");
     resetGame();
+    return true;
   }
   else
     for (let i = 1; i < snake.length; i++) {
@@ -175,29 +175,30 @@ function checkCollision() {
         return true;
       }
     }
+  return false;
 }
 
 // Resetting game
 function resetGame() {
+  updateHighScore();
   stopGame();
   snake = [{x: 10, y: 10}];
   draw();
   food = generateFood();
   direction = 'right';
   gameSpeedDelay = 200;
-  updateHighScore();
 }
 
 // Updating score
 function updateScore() {
-  currentScore= (snake.length - 1 >= 0 ? snake.length - 1 : 0);
-  score.textContent = currentScore.toString().padStart(2, '0');
+  currentScore = (snake.length - 1 >= 0 ? snake.length - 1 : 0);
+  score.textContent = currentScore.toString().padStart(3, '0');
 }
 
 // Updating highScore
 function updateHighScore() {
   if (currentScore > currentHighScore) currentHighScore = currentScore ;
-  highScore.textContent = currentHighScore.toString().padStart(3);
+  highScore.textContent = currentHighScore.toString().padStart(3, '0');
   highScore.style.display = 'block';
 }
 
